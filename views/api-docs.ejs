@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentation API - Port Russell</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .docs-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .docs-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .docs-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .docs-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .endpoint-section {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .endpoint {
+            background: #f8f9fa;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+
+        .endpoint-method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.85rem;
+            margin-right: 10px;
+            color: white;
+        }
+
+        .method-get {
+            background: #28a745;
+        }
+
+        .method-post {
+            background: #007bff;
+        }
+
+        .method-put {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .method-delete {
+            background: #dc3545;
+        }
+
+        .endpoint-path {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #333;
+            margin-top: 8px;
+        }
+
+        .endpoint-desc {
+            color: #666;
+            margin-top: 8px;
+            font-size: 0.95rem;
+        }
+
+        .auth-note {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            color: #856404;
+        }
+
+        .example-code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 6px;
+            overflow-x: auto;
+            margin-top: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .code-comment {
+            color: #75715e;
+        }
+
+        .code-string {
+            color: #e6db74;
+        }
+
+        .code-key {
+            color: #a6e22e;
+        }
+
+        .toc {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 20px;
+            margin-bottom: 30px;
+        }
+
+        .toc h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .toc ul {
+            list-style: none;
+        }
+
+        .toc li {
+            margin-bottom: 8px;
+        }
+
+        .toc a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body style="background: #f5f6fa;">
+    <div class="docs-container">
+        <a href="/" class="back-link">← Retour à l'accueil</a>
+
+        <div class="docs-header">
+            <h1>📚 Documentation API</h1>
+            <p>Port de Plaisance Russell - API REST</p>
+        </div>
+
+        <div class="toc">
+            <h3>📖 Table des matières</h3>
+            <ul>
+                <li><a href="#auth">🔐 Authentification</a></li>
+                <li><a href="#catways">⚓ Catways</a></li>
+                <li><a href="#reservations">📅 Réservations</a></li>
+                <li><a href="#users">👥 Utilisateurs</a></li>
+            </ul>
+        </div>
+
+        <!-- Authentification -->
+        <div class="endpoint-section" id="auth">
+            <h2 class="section-title">🔐 Authentification</h2>
+            
+            <div class="auth-note">
+                <strong>⚠️ Important :</strong> Toutes les routes API (sauf /api/login) nécessitent un token JWT dans le header :
+                <div class="example-code">Authorization: Bearer &lt;votre_token&gt;</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-post">POST</span>
+                <span class="endpoint-path">/api/login</span>
+                <div class="endpoint-desc">Obtenir un token JWT pour accéder à l'API</div>
+                <div class="example-code">
+<span class="code-comment">// Request</span>
+{
+  <span class="code-string">"email"</span>: <span class="code-string">"admin@port-russell.fr"</span>,
+  <span class="code-string">"password"</span>: <span class="code-string">"admin123"</span>
+}
+
+<span class="code-comment">// Response</span>
+{
+  <span class="code-string">"success"</span>: true,
+  <span class="code-string">"token"</span>: <span class="code-string">"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."</span>,
+  <span class="code-string">"user"</span>: {
+    <span class="code-string">"id"</span>: <span class="code-string">"..."</span>,
+    <span class="code-string">"username"</span>: <span class="code-string">"admin"</span>,
+    <span class="code-string">"email"</span>: <span class="code-string">"admin@port-russell.fr"</span>
+  }
+}
+                </div>
+            </div>
+        </div>
+
+        <!-- Catways -->
+        <div class="endpoint-section" id="catways">
+            <h2 class="section-title">⚓ Catways</h2>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/catways</span>
+                <div class="endpoint-desc">Récupérer la liste de tous les catways</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/catways/:id</span>
+                <div class="endpoint-desc">Récupérer les détails d'un catway spécifique</div>
+                <div class="example-code">/api/catways/1</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-post">POST</span>
+                <span class="endpoint-path">/api/catways</span>
+                <div class="endpoint-desc">Créer un nouveau catway</div>
+                <div class="example-code">
+{
+  <span class="code-string">"catwayNumber"</span>: 25,
+  <span class="code-string">"catwayType"</span>: <span class="code-string">"short"</span>,
+  <span class="code-string">"catwayState"</span>: <span class="code-string">"bon état"</span>
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-put">PUT</span>
+                <span class="endpoint-path">/api/catways/:id</span>
+                <div class="endpoint-desc">Modifier l'état d'un catway (seul catwayState peut être modifié)</div>
+                <div class="example-code">
+{
+  <span class="code-string">"catwayState"</span>: <span class="code-string">"En réparation"</span>
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-delete">DELETE</span>
+                <span class="endpoint-path">/api/catways/:id</span>
+                <div class="endpoint-desc">Supprimer un catway</div>
+            </div>
+        </div>
+
+        <!-- Réservations -->
+        <div class="endpoint-section" id="reservations">
+            <h2 class="section-title">📅 Réservations</h2>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/reservations</span>
+                <div class="endpoint-desc">Récupérer toutes les réservations</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/catways/:id/reservations</span>
+                <div class="endpoint-desc">Récupérer les réservations d'un catway spécifique</div>
+                <div class="example-code">/api/catways/1/reservations</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/catways/:id/reservations/:idReservation</span>
+                <div class="endpoint-desc">Récupérer les détails d'une réservation</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-post">POST</span>
+                <span class="endpoint-path">/api/catways/:id/reservations</span>
+                <div class="endpoint-desc">Créer une nouvelle réservation</div>
+                <div class="example-code">
+{
+  <span class="code-string">"clientName"</span>: <span class="code-string">"Jean Dupont"</span>,
+  <span class="code-string">"boatName"</span>: <span class="code-string">"L'Aventurier"</span>,
+  <span class="code-string">"startDate"</span>: <span class="code-string">"2024-06-01"</span>,
+  <span class="code-string">"endDate"</span>: <span class="code-string">"2024-06-15"</span>
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-put">PUT</span>
+                <span class="endpoint-path">/api/catways/:id/reservations/:idReservation</span>
+                <div class="endpoint-desc">Modifier une réservation</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-delete">DELETE</span>
+                <span class="endpoint-path">/api/catways/:id/reservations/:idReservation</span>
+                <div class="endpoint-desc">Supprimer une réservation</div>
+            </div>
+        </div>
+
+        <!-- Utilisateurs -->
+        <div class="endpoint-section" id="users">
+            <h2 class="section-title">👥 Utilisateurs</h2>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/users</span>
+                <div class="endpoint-desc">Récupérer la liste de tous les utilisateurs</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-get">GET</span>
+                <span class="endpoint-path">/api/users/:email</span>
+                <div class="endpoint-desc">Récupérer les détails d'un utilisateur</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-post">POST</span>
+                <span class="endpoint-path">/api/users</span>
+                <div class="endpoint-desc">Créer un nouvel utilisateur</div>
+                <div class="example-code">
+{
+  <span class="code-string">"username"</span>: <span class="code-string">"nouveau_user"</span>,
+  <span class="code-string">"email"</span>: <span class="code-string">"user@example.com"</span>,
+  <span class="code-string">"password"</span>: <span class="code-string">"motdepasse123"</span>
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-put">PUT</span>
+                <span class="endpoint-path">/api/users/:email</span>
+                <div class="endpoint-desc">Modifier un utilisateur</div>
+            </div>
+
+            <div class="endpoint">
+                <span class="endpoint-method method-delete">DELETE</span>
+                <span class="endpoint-path">/api/users/:email</span>
+                <div class="endpoint-desc">Supprimer un utilisateur</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

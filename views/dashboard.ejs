@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tableau de bord - Port Russell</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>🚢 Port Russell</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="/dashboard" class="active">📊 Tableau de bord</a></li>
+                <li><a href="/catways">⚓ Catways</a></li>
+                <li><a href="/reservations">📅 Réservations</a></li>
+                <li><a href="/users">👥 Utilisateurs</a></li>
+                <li><a href="/api-docs" target="_blank">📖 Documentation API</a></li>
+                <li><a href="/logout" class="logout-link">🚪 Déconnexion</a></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <header class="page-header">
+                <div>
+                    <h1>Tableau de bord</h1>
+                    <p class="date"><%= currentDate %></p>
+                </div>
+                <div class="user-info">
+                    <span class="user-name"><%= user.username %></span>
+                    <span class="user-email"><%= user.email %></span>
+                </div>
+            </header>
+
+            <section class="stats-section">
+                <div class="stat-card">
+                    <h3>Réservations actives</h3>
+                    <p class="stat-number"><%= activeReservations.length %></p>
+                </div>
+            </section>
+
+            <section class="reservations-section">
+                <h2>Réservations en cours</h2>
+                
+                <% if (activeReservations.length === 0) { %>
+                    <div class="empty-state">
+                        <p>Aucune réservation en cours</p>
+                    </div>
+                <% } else { %>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Catway</th>
+                                    <th>Client</th>
+                                    <th>Bateau</th>
+                                    <th>Début</th>
+                                    <th>Fin</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% activeReservations.forEach(reservation => { %>
+                                    <tr>
+                                        <td>#<%= reservation.catwayNumber %></td>
+                                        <td><%= reservation.clientName %></td>
+                                        <td><%= reservation.boatName %></td>
+                                        <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+                                        <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } %>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
