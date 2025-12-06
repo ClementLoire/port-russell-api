@@ -121,6 +121,66 @@ app.get('/api-docs', (req, res) => {
   res.render('api-docs');
 });
 
+// Route temporaire pour initialiser la base de données (À SUPPRIMER APRÈS USAGE)
+app.get('/init-db', async (req, res) => {
+  try {
+    console.log('🌱 Début de l\'initialisation...');
+    
+    // Nettoyer les collections
+    await User.deleteMany({});
+    await Catway.deleteMany({});
+    await Reservation.deleteMany({});
+    console.log('🗑️  Collections nettoyées');
+
+    // Créer l'utilisateur admin
+    const adminUser = await User.create({
+      username: 'admin',
+      email: 'admin@port-russell.fr',
+      password: 'admin123'
+    });
+    console.log('👤 Admin créé');
+
+    // Importer les catways
+    const fs = require('fs');
+    const path = require('path');
+    
+    const catwaysData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data/catways.json'), 'utf8')
+    );
+    const catways = await Catway.insertMany(catwaysData);
+    console.log(`⚓ ${catways.length} catways importés`);
+
+    // Importer les réservations
+    const reservationsData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, 'data/reservations.json'), 'utf8')
+    );
+    const reservations = await Reservation.insertMany(reservationsData);
+    console.log(`📅 ${reservations.length} réservations importées`);
+
+    res.json({
+      success: true,
+      message: '✅ Base de données initialisée avec succès !',
+      data: {
+        admin: {
+          email: adminUser.email,
+          username: adminUser.username
+        },
+        stats: {
+          catways: catways.length,
+          reservations: reservations.length
+        }
+      }
+    });
+  } catch (error) {
+    console.error('❌ Erreur:', error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      stack: error.stack
+    });
+  }
+});
+
 // Gestion des erreurs 404
 app.use((req, res) => {
   res.status(404).send('Page non trouvée');
