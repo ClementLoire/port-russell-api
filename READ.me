@@ -1,0 +1,280 @@
+# 🚢 Port de Plaisance Russell - API de Gestion
+
+Application web de gestion des réservations de catways pour le Port de Plaisance Russell.
+
+## 🌐 Déploiement
+
+**Application déployée :** https://port-russell-api.onrender.com
+
+**Documentation API :** https://port-russell-api.onrender.com/api-docs
+
+### 👤 Identifiants de test
+- **Email :** admin@port-russell.fr
+- **Mot de passe :** admin123
+
+---
+
+## 📋 Description
+
+Cette application permet à la capitainerie du port de gérer efficacement :
+- Les catways (appontements)
+- Les réservations de bateaux
+- Les utilisateurs du système
+
+L'application propose :
+- Une API REST complète et documentée
+- Une interface web intuitive pour la gestion
+- Un système d'authentification sécurisé
+
+## 🛠️ Technologies utilisées
+
+- **Backend**: Node.js, Express.js
+- **Base de données**: MongoDB avec Mongoose
+- **Authentification**: JWT + Express Session
+- **Frontend**: EJS, CSS3, JavaScript vanilla
+- **Sécurité**: bcryptjs pour le hashage des mots de passe
+- **Déploiement**: Render.com
+
+## 📦 Installation locale
+
+### Prérequis
+- Node.js (v16 ou supérieur)
+- MongoDB (local ou MongoDB Atlas)
+- Git
+
+### Étapes d'installation
+
+1. **Cloner le repository**
+```bash
+git clone https://github.com/ClementLoire/port-russell-api.git
+cd port-russell-api
+```
+
+2. **Installer les dépendances**
+```bash
+npm install
+```
+
+3. **Configuration de l'environnement**
+
+Créez un fichier `.env` à la racine du projet :
+```env
+PORT=3000
+MONGODB_URI=mongodb://localhost:27017/port-russell
+JWT_SECRET=votre_secret_jwt_changez_moi
+SESSION_SECRET=votre_secret_session_changez_moi
+NODE_ENV=development
+```
+
+**Pour MongoDB Atlas** :
+```env
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/port-russell
+```
+
+4. **Initialiser la base de données**
+```bash
+npm run seed
+```
+
+Cette commande va :
+- Créer un utilisateur admin (email: `admin@port-russell.fr`, mot de passe: `admin123`)
+- Importer les catways depuis `data/catways.json`
+- Importer les réservations depuis `data/reservations.json`
+
+5. **Démarrer le serveur**
+
+En mode développement (avec rechargement automatique) :
+```bash
+npm run dev
+```
+
+En mode production :
+```bash
+npm start
+```
+
+6. **Accéder à l'application**
+- Interface web : http://localhost:3000
+- Documentation API : http://localhost:3000/api-docs
+
+## 🔐 Authentification
+
+### Pour l'interface web
+- Connectez-vous sur http://localhost:3000/login
+- Utilisez les identifiants admin créés lors du seed
+
+### Pour l'API
+1. Obtenez un token JWT :
+```bash
+POST /api/login
+Content-Type: application/json
+
+{
+  "email": "admin@port-russell.fr",
+  "password": "admin123"
+}
+```
+
+2. Utilisez le token dans vos requêtes :
+```bash
+Authorization: Bearer <votre_token>
+```
+
+## 📚 Endpoints de l'API
+
+### Authentication
+- `POST /api/login` - Connexion (retourne un token JWT)
+
+### Catways
+- `GET /api/catways` - Liste tous les catways
+- `GET /api/catways/:id` - Détails d'un catway
+- `POST /api/catways` - Créer un catway
+- `PUT /api/catways/:id` - Modifier l'état d'un catway
+- `DELETE /api/catways/:id` - Supprimer un catway
+
+### Réservations
+- `GET /api/reservations` - Liste toutes les réservations
+- `GET /api/catways/:id/reservations` - Réservations d'un catway
+- `GET /api/catways/:id/reservations/:idReservation` - Détails d'une réservation
+- `POST /api/catways/:id/reservations` - Créer une réservation
+- `PUT /api/catways/:id/reservations/:idReservation` - Modifier une réservation
+- `DELETE /api/catways/:id/reservations/:idReservation` - Supprimer une réservation
+
+### Utilisateurs
+- `GET /api/users` - Liste tous les utilisateurs
+- `GET /api/users/:email` - Détails d'un utilisateur
+- `POST /api/users` - Créer un utilisateur
+- `PUT /api/users/:email` - Modifier un utilisateur
+- `DELETE /api/users/:email` - Supprimer un utilisateur
+
+## 📖 Exemples d'utilisation de l'API
+
+### Créer une réservation
+```bash
+POST /api/catways/1/reservations
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "clientName": "Jean Dupont",
+  "boatName": "L'Aventurier",
+  "startDate": "2024-06-01",
+  "endDate": "2024-06-15"
+}
+```
+
+### Modifier l'état d'un catway
+```bash
+PUT /api/catways/1
+Authorization: Bearer <token>
+Content-Type: application/json
+
+{
+  "catwayState": "En maintenance - Réparation prévue le 15/06"
+}
+```
+
+## 🗂️ Structure du projet
+
+```
+port-russell-api/
+├── config/              # Configuration (base de données)
+├── controllers/         # Logique métier
+├── middleware/          # Middleware (authentification)
+├── models/             # Modèles Mongoose
+├── routes/             # Routes de l'API
+├── views/              # Templates EJS
+├── public/             # Fichiers statiques (CSS, JS)
+├── data/               # Données d'initialisation
+├── scripts/            # Scripts utilitaires (seed)
+├── .env                # Variables d'environnement
+├── server.js           # Point d'entrée de l'application
+└── package.json        # Dépendances et scripts
+```
+
+## ✨ Fonctionnalités
+
+### Interface Web
+- ✅ Page d'accueil avec présentation
+- ✅ Système de connexion/déconnexion
+- ✅ Dashboard avec statistiques
+- ✅ Gestion complète des catways (CRUD)
+- ✅ Gestion des réservations (CRUD)
+- ✅ Gestion des utilisateurs (CRUD)
+- ✅ Détection automatique des conflits de réservations
+- ✅ Affichage du statut des réservations (en cours, terminée, à venir)
+
+### API REST
+- ✅ Authentification JWT sécurisée
+- ✅ Routes RESTful pour toutes les ressources
+- ✅ Validation des données
+- ✅ Gestion des erreurs
+- ✅ Documentation complète
+
+### Sécurité
+- ✅ Mots de passe hashés avec bcrypt
+- ✅ Protection JWT pour l'API
+- ✅ Sessions sécurisées pour le web
+- ✅ Validation des entrées utilisateur
+- ✅ Protection contre les conflits de réservations
+
+## 🚀 Déploiement sur Render
+
+### Variables d'environnement à configurer
+
+```env
+PORT=3000
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/port-russell
+JWT_SECRET=votre_secret_securise_production
+SESSION_SECRET=votre_secret_securise_production
+NODE_ENV=production
+```
+
+### Configuration Render
+- **Build Command:** `npm install`
+- **Start Command:** `npm start`
+- **Region:** Frankfurt (ou le plus proche)
+
+## 📊 Collections MongoDB
+
+- **users** : Utilisateurs de l'application
+- **catways** : 24 catways du port
+- **reservations** : Réservations de bateaux
+
+## 🔒 Sécurité
+
+- Les mots de passe sont hashés avec bcrypt (10 rounds)
+- Les routes API sont protégées par JWT
+- Les sessions web utilisent des cookies sécurisés (en production)
+- Validation des données avec express-validator
+- Protection contre les injections MongoDB
+
+## 📝 Notes importantes
+
+- Changez les secrets dans le fichier `.env` avant le déploiement
+- Créez des utilisateurs avec des mots de passe forts en production
+- Configurez HTTPS en production
+- Les cookies sécurisés sont activés automatiquement en production (NODE_ENV=production)
+
+## 🤝 Contribution
+
+Pour contribuer :
+1. Fork le projet
+2. Créez une branche (`git checkout -b feature/amelioration`)
+3. Committez vos changements (`git commit -m 'Ajout fonctionnalité'`)
+4. Push vers la branche (`git push origin feature/amelioration`)
+5. Ouvrez une Pull Request
+
+## 📄 Licence
+
+ISC
+
+## 👥 Auteur
+
+Projet réalisé dans le cadre de la formation développeur web - Port de Plaisance Russell
+
+## 📞 Support
+
+Pour toute question ou problème :
+- Issues GitHub : [lien vers les issues]
+- Email : support@port-russell.fr
